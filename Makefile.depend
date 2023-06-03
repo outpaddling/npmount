@@ -1,0 +1,3 @@
+npmount.o: npmount.c
+	${CC} -c ${CFLAGS} npmount.c
+
