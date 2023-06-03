@@ -95,10 +95,10 @@ CPP         ?= cpp
 INCLUDES    += -isystem ${PREFIX}/include -isystem ${LOCALBASE}/include
 CFLAGS      += ${INCLUDES}
 LDFLAGS     += -L${PREFIX}/lib -Wl,-rpath,${PREFIX}/lib \
-	       -L${LOCALBASE}/lib -Wl,-rpath,${LOCALBASE}/lib
+	       -L${LOCALBASE}/lib -Wl,-rpath,${LOCALBASE}/lib -lxtend
 
 ############################################################################
-# Assume first command in PATH.  Override with full pathnames if necessary.
+# Assume first command in PATH.  Override with full pathnames if neceLssary.
 # E.g. "make INSTALL=/usr/local/bin/ginstall"
 # Do not place flags here (e.g. RM = rm -f).  Just provide the command
 # and let flags be specified separately.
