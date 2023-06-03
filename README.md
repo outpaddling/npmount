@@ -29,8 +29,10 @@ shown below indicates that members of the operator group can mount
 and unmount directories under /media, which commonly contains mount points
 for USB sticks and optical discs.
 
-Group       Mount-point
+```
+# Group     Mount-points
 operator    /media/*
+```
 
 Mounting also requires that the mount point be listed in /etc/fstab
 or equivalent.  The Unix mount command is issued with a mount point alone.
