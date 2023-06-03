@@ -145,6 +145,9 @@ int     np_cmd(const char *command, const char *mount_point)
 		    return EX_SOFTWARE;
 		}
 		
+		// FIXME: Is there a portable way to check for remote
+		// sessions, so we can limit unmount to the console user?
+		
 		for (int c = 0; c < ngroups; ++c)
 		{
 		    if ( groups[c] == group_st->gr_gid )
