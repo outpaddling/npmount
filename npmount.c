@@ -179,6 +179,6 @@ int     np_cmd(const char *command, const char *mount_point)
 void    usage(char *argv[])
 
 {
-    fprintf(stderr, "Usage: %s\n", argv[0]);
+    fprintf(stderr, "Usage: %s [u]mount /mount/path\n", argv[0]);
     exit(EX_USAGE);
 }
