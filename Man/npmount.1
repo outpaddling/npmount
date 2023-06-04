@@ -15,33 +15,73 @@ npmount umount /mount/point
 .ad
 .fi
 
-.SH OPTIONS
-.TP
-\fB--flag\fR[=\fIparameter\fR]
-description
-
 \" Optional sections
-.SH "HOW TO READ THIS MANUAL"
-.SH "ORGANIZATION"
-.SH "PURPOSE"
 .SH "DESCRIPTION"
+
+.B NPmount
+is a command-line tool to provide limited mount and unmount
+capabilities to non-privileged users, such as mounting and unmounting
+external media including optical discs and thumb drives.
+
+NPMount can be used directly from the command-line or as a
+platform-independent backend for GUI applications such as file managers.
+
+It is more convenient than other methods because it is fully portable,
+and never requires the user to enter a password.
+
+.SH "CONFIGURATION"
+
+The configuration file is simple.  It indicates which mount points
+can be controlled by members of a given group.  The default configurtion
+shown below indicates that members of the operator group can mount
+and unmount directories under /media, which commonly contains mount points
+for USB sticks and optical discs.
+
+.nf
+.na
+# Group     Mount-points
+operator    /media/*
+.ad
+.fi
+
+Mounting also requires that the mount point be listed in /etc/fstab
+or equivalent.  The Unix mount command is issued with a mount point alone.
+
+Unmounting does not require a listing in /etc/fstab, since the Unix
+umount command needs only a mount point or device.
+
+Most mounts of external media are performed by an automount service,
+anyway, so use of npmount to mount media should not often be necessary.
+
+.SH "USAGE"
+
+Using the configuration above as an example, members of the operator
+group can run the following without authenticating:
+
+.nf
+.na
+npmount umount /media/cd0
+.ad
+.fi
+
+If /media/cd0 is configured in /etc/fstab or equivalent, then members
+of the operator group can also run
+
+.nf
+.na
+npmount mount /media/cd0
+.ad
+.fi
 
 .SH FILES
 .nf
 .na
-\" List related files and describe each one here
-.ad
-.fi
-
-.SH ENVIRONMENT
-.nf
-.na
-\" List related environment variables and describe each one here
+${PREFIX}/etc/npmount.conf
 .ad
 .fi
 
 .SH "SEE ALSO"
-\" List related commands here
+mount(8), umount(8), setuid(2)
 
 .SH BUGS
 Please report bugs to the author and send patches in unified diff format.
@@ -50,3 +90,4 @@ Please report bugs to the author and send patches in unified diff format.
 .SH AUTHOR
 .nf
 .na
+J. Bacon
