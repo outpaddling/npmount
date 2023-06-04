@@ -30,7 +30,7 @@
 #define MAX_GROUP_LEN   64
 #define MAX_PATTERN_LEN 64
 #define MAX_LINE_LEN    128
-#define MAX_GROUPS      100
+#define MAX_GROUPS      100     // FIXME: Get real value from sysconf()
 #define USER_NAME_MAX   64
 
 int     main(int argc,char *argv[])
@@ -49,6 +49,8 @@ int     main(int argc,char *argv[])
 	    usage(argv);
     }
     
+    // FIXME: Maybe push checks into np_cmd() and make it available
+    // via a library
     if ( strcmp(subcommand, "mount") == 0 )
 	return np_cmd(subcommand, mount_point);
     else if ( strcmp(subcommand, "umount") == 0 )
@@ -72,7 +74,7 @@ int     np_cmd(const char *command, const char *mount_point)
 		user_name[USER_NAME_MAX + 1];
     struct group    *group_st;
     gid_t       groups[MAX_GROUPS];
-    int         ngroups = MAX_GROUPS;
+    int         ngroups;
     
     if ( stat(CONFIG_FILE, &st) != 0 )
     {
@@ -136,12 +138,10 @@ int     np_cmd(const char *command, const char *mount_point)
 		// Is the user a member of the group allowed to [un]mount?
 		group_st = getgrnam(group_name);
 		
-		// FIXME: getgrouplist() is not POSIX
-		xt_get_user_name(user_name, USER_NAME_MAX + 1);
-		if ( getgrouplist(user_name, getgid(), groups, &ngroups) != 0 )
+		if ( (ngroups = getgroups(MAX_GROUPS, groups)) == -1 )
 		{
-		    fprintf(stderr, "npmount: Could not get user's group list.\n");
-		    fprintf(stderr, "Is the group list array too small?\n");
+		    fprintf(stderr, "npmount: Could not get user's group list: %s\n",
+			    strerror(errno));
 		    return EX_SOFTWARE;
 		}
 		
