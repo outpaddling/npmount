@@ -38,6 +38,7 @@ int     main(int argc,char *argv[])
 
 {
     char    *subcommand, *mount_point;
+    int     len;
     
     switch(argc)
     {
@@ -48,7 +49,12 @@ int     main(int argc,char *argv[])
 	
 	default:
 	    usage(argv);
+	    return EX_USAGE;    // Useless, but to silence compiler
     }
+    
+    len = strlen(mount_point) - 1;
+    if ( mount_point[len] == '/' )
+	mount_point[len] = '\0';
     
     // FIXME: Maybe push checks into np_cmd() and make it available
     // via a library
