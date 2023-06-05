@@ -21,6 +21,7 @@
 #include <fnmatch.h>
 #include <grp.h>            // getgrnam()
 #include <unistd.h>         // execlp()
+#include <sys/wait.h>
 #include <xtend/string.h>   // strblank()
 #include <xtend/proc.h>     // xt_get_user_name()
 #include "protos.h"
@@ -74,7 +75,7 @@ int     np_cmd(const char *command, const char *mount_point)
 		user_name[USER_NAME_MAX + 1];
     struct group    *group_st;
     gid_t       groups[MAX_GROUPS];
-    int         ngroups;
+    int         ngroups, status;
     
     if ( stat(CONFIG_FILE, &st) != 0 )
     {
@@ -155,7 +156,18 @@ int     np_cmd(const char *command, const char *mount_point)
 			if ( setuid(0) == 0 )
 			{
 			    fclose(config_fp);
-			    execlp(command, command, mount_point, NULL);
+			    if ( fork() == 0 )
+			    {
+				execlp(command, command, mount_point, NULL);
+				fprintf(stderr, "npmount: exec failed: %s\n",
+					strerror(errno));
+				return EX_SOFTWARE;
+			    }
+			    else
+			    {
+				wait(&status);
+				return status;
+			    }
 			}
 			else
 			{
