@@ -170,9 +170,12 @@ int     np_cmd(const char *command, const char *mount_point)
 			    else
 			    {
 				wait(&status);
-				// status set by wait is may be > 255, which
-				// would return as 0 since RV is 1 byte
-				return EX_SOFTWARE;
+				if ( status == 0 )
+				    return EX_OK;
+				else
+				    // status set by wait is may be > 255, which
+				    // would return as 0 since RV is 1 byte
+				    return EX_SOFTWARE;
 			    }
 			}
 			else
