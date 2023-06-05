@@ -58,8 +58,6 @@ int     main(int argc,char *argv[])
 	return np_cmd(subcommand, mount_point);
     else
 	usage(argv);
-    
-    return EX_OK;
 }
 
 
@@ -138,6 +136,12 @@ int     np_cmd(const char *command, const char *mount_point)
 	    {
 		// Is the user a member of the group allowed to [un]mount?
 		group_st = getgrnam(group_name);
+		if ( group_st == NULL )
+		{
+		    fprintf(stderr, "npmount: No such group: %s\n",
+			    group_name);
+		    return EX_DATAERR;
+		}
 		
 		if ( (ngroups = getgroups(MAX_GROUPS, groups)) == -1 )
 		{
@@ -166,7 +170,9 @@ int     np_cmd(const char *command, const char *mount_point)
 			    else
 			    {
 				wait(&status);
-				return status;
+				// status set by wait is may be > 255, which
+				// would return as 0 since RV is 1 byte
+				return EX_SOFTWARE;
 			    }
 			}
 			else
@@ -177,17 +183,20 @@ int     np_cmd(const char *command, const char *mount_point)
 		    }
 		}
 		
+		xt_get_user_name(user_name, USER_NAME_MAX + 1);
 		fprintf(stderr, "npmount: User %s is not a member of group %s.\n",
 			user_name, group_name);
+		fclose(config_fp);
+		return EX_NOPERM;
 	    }
 	}
     }
     
     fprintf(stderr, "npmount: %s does not match any allowed mount point.\n",
 	    mount_point);
-    
     fclose(config_fp);
-    return EX_OK;
+    
+    return EX_NOPERM;
 }
 
 
