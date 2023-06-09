@@ -159,9 +159,11 @@ int     np_cmd(const char *command, const char *mount_point)
 		{
 		    if ( groups[c] == group_st->gr_gid )
 		    {
+			// Group and mount point match, no need to read more
+			fclose(config_fp);
+			
 			if ( setuid(0) == 0 )
 			{
-			    fclose(config_fp);
 			    if ( fork() == 0 )
 			    {
 				execlp(command, command, mount_point, NULL);
