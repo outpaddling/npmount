@@ -2,10 +2,6 @@
  *  Description:
  *      Non-privileged mount tool
  *
- *  Arguments:
- *
- *  Returns:
- *
  *  History: 
  *  Date        Name        Modification
  *  2023-06-03  Jason Bacon Begin
