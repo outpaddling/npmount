@@ -17,16 +17,16 @@ and never requires the user to enter a password.
 
 ## Security
 
-NPmount is safer than sudo, since it never allows the execution of
-arbitrary code under escalated privileges.  Only mount, umount, and
-configuration update commands are ever run as root.
+NPMount is safer than sudo, since it never allows the execution of
+arbitrary code under escalated privileges.  Only mount and umount
+commands for authorized mount points are ever run as root.
 
 ## Configuration file
 
 The configuration file is simple.  It indicates which mount points
-can be controlled by members of a given group.  The default configurtion
+can be controlled by members of a given group.  The default configuration
 shown below indicates that members of the operator group can mount
-and unmount directories under /media, which commonly contains mount points
+and unmount all directories under /media, which commonly contains mount points
 for USB sticks and optical discs.
 
 ```
@@ -36,12 +36,11 @@ operator    /media/*
 
 Mounting also requires that the mount point be listed in /etc/fstab
 or equivalent.  The Unix mount command is issued with a mount point alone.
+Most mounts of external media are performed by an automount service,
+anyway, so use of npmount to mount media should not often be necessary.
 
 Unmounting does not require a listing in /etc/fstab, since the Unix
 umount command needs only a mount point or device.
-
-Most mounts of external media are performed by an automount service,
-anyway, so use of npmount to mount media should not often be necessary.
 
 ## Usage
 
