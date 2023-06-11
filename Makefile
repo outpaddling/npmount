@@ -163,7 +163,8 @@ realclean: clean
 # Install all target files (binaries, libraries, docs, etc.)
 
 install: all
-	${MKDIR} -p ${DESTDIR}${PREFIX}/bin ${DESTDIR}${MANDIR}/man1
+	${MKDIR} -p ${DESTDIR}${PREFIX}/bin ${DESTDIR}${MANDIR}/man1 \
+		    ${DESTDIR}${PREFIX}/etc
 	${INSTALL} -s -m 0755 ${BIN} ${DESTDIR}${PREFIX}/bin
 	${INSTALL} -m 0644 Man/*.1 ${DESTDIR}${MANDIR}/man1
 	${INSTALL} -m 0644 npmount.conf ${DESTDIR}${PREFIX}/etc/npmount.conf.sample
