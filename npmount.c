@@ -18,7 +18,7 @@
 #include <grp.h>            // getgrnam()
 #include <unistd.h>         // execlp()
 #include <sys/wait.h>
-#include <xtend/string.h>   // strblank()
+#include <xtend/string.h>   // xt_strblank()
 #include <xtend/proc.h>     // xt_get_user_name()
 #include "protos.h"
 
@@ -116,7 +116,7 @@ int     np_cmd(const char *command, const char *mount_point)
     
     while ( fgets(line, MAX_LINE_LEN + 1, config_fp) != NULL )
     {
-	if ( (line[0] != '#') && ! strblank(line) )
+	if ( (line[0] != '#') && ! xt_strblank(line) )
 	{
 	    // We know the line is not blank at this point
 	    for (p = line; isspace(*p); ++p)
